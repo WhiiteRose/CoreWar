@@ -7,8 +7,12 @@ ASM_SRCS	:= src/cli/asm_main.c
 COREWAR_SRCS	:= src/cli/corewar_main.c
 ASM_OBJS	:= $(ASM_SRCS:.c=.o)
 COREWAR_OBJS	:= $(COREWAR_SRCS:.c=.o)
+COMMON_SRCS	:= src/vm/arena.c
+COMMON_OBJS	:= $(COMMON_SRCS:.c=.o)
 TEST_NAME	:= unit_test
-TEST_SRCS	:= tests/unit/test_dummy.c
+TEST_SRCS	:= \
+	tests/unit/test_dummy.c \
+	tests/unit/test_arena.c
 TEST_OBJS	:= $(TEST_SRCS:.c=.o)
 CRITERION_FLAGS	:= -lcriterion
 .PHONY: all clean fclean re test
@@ -19,7 +23,7 @@ $(COREWAR_NAME): $(COREWAR_OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^
 test: $(TEST_NAME)
 	./$(TEST_NAME)
-$(TEST_NAME): $(TEST_OBJS)
+$(TEST_NAME): $(TEST_OBJS) $(COMMON_OBJS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ $^ $(CRITERION_FLAGS)
 %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
