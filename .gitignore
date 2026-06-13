@@ -1,0 +1,6 @@
+.hermes/
+*.o
+asm
+corewar
+unit_test
+unit_tests
