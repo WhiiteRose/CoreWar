@@ -58,3 +58,65 @@ Test(process_advance_pc, advances_pc_with_negative_offset) {
     cr_assert_eq(process.pc, 4086);
 }
 
+Test(process_valid_register, valid_registers) {
+    for (int i = 1; i <= NUM_REGISTERS; i++) {
+        cr_assert(process_valid_register(i));
+    }
+}
+
+Test(process_valid_register, invalid_registers) {
+    cr_assert_not(process_valid_register(0));
+    cr_assert_not(process_valid_register(NUM_REGISTERS + 1));
+    cr_assert_not(process_valid_register(-1));
+}
+
+Test(process_read_register, reads_valid_register) {
+    process_t process;
+    process_init(&process, 0);
+    process.registers[0] = 42;
+
+    unsigned int value = process_read_register(&process, 1);
+    cr_assert_eq(value, 42);
+}
+
+Test(process_read_register, reads_invalid_register) {
+    process_t process;
+    process_init(&process, 0);
+
+    unsigned int value = process_read_register(&process, 0);
+    cr_assert_eq(value, 0);
+
+    value = process_read_register(&process, NUM_REGISTERS + 1);
+    cr_assert_eq(value, 0);
+
+    value = process_read_register(&process, -1);
+    cr_assert_eq(value, 0);
+}
+
+Test(process_write_register, writes_to_valid_register) {
+    process_t process;
+    process_init(&process, 0);
+
+    process_write_register(&process, 1, 42);
+    cr_assert_eq(process.registers[0], 42);
+}
+
+Test(process_write_register, writes_to_invalid_register) {
+    process_t process;
+    process_init(&process, 0);
+
+    process_write_register(&process, 0, 42);
+    for (int i = 0; i < NUM_REGISTERS; i++) {
+        cr_assert_eq(process.registers[i], 0);
+    }
+
+    process_write_register(&process, NUM_REGISTERS + 1, 42);
+    for (int i = 0; i < NUM_REGISTERS; i++) {
+        cr_assert_eq(process.registers[i], 0);
+    }
+
+    process_write_register(&process, -1, 42);
+    for (int i = 0; i < NUM_REGISTERS; i++) {
+        cr_assert_eq(process.registers[i], 0);
+    }
+}

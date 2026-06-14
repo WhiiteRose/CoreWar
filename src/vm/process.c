@@ -15,3 +15,24 @@ void process_advance_pc(process_t *process, int offset)
     int new_pc = process->pc + offset;
     process->pc = arena_wrap_addr(new_pc);
 }
+
+bool process_valid_register(int reg)
+{
+    return reg >= 1 && reg <= NUM_REGISTERS;
+}
+
+unsigned int process_read_register(process_t *process, int reg)
+{
+    if (!process_valid_register(reg)) {
+        return 0;
+    }
+    return process->registers[reg - 1];
+}
+
+void process_write_register(process_t *process, int reg, unsigned int value)
+{
+    if (!process_valid_register(reg)) {
+        return;
+    }
+    process->registers[reg - 1] = value;
+}
