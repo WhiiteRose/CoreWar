@@ -30,5 +30,5 @@ $(TEST_NAME): $(TEST_OBJS) $(COMMON_OBJS)
 clean:
 	rm -f $(ASM_OBJS) $(COREWAR_OBJS) $(TEST_OBJS)
 fclean: clean
-	rm -f $(ASM_NAME) $(COREWAR_NAME) $(TEST_NAME)
+	rm -f $(ASM_NAME) $(COREWAR_NAME) $(TEST_NAME) $(COMMON_OBJS)
 re: fclean all
