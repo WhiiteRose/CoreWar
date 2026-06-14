@@ -11,5 +11,6 @@ typedef struct process_s {
 } process_t;
 
 void process_init(process_t *process, int pc);
+void process_advance_pc(process_t *process, int offset);
 
 #endif // _PROCESS_H_
