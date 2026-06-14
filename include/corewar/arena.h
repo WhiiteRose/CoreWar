@@ -11,4 +11,8 @@ int arena_wrap_addr(int addr);
 void arena_init(arena_t *arena);
 unsigned char arena_read_u8(arena_t *arena, int addr);
 void arena_write_u8(arena_t *arena, int addr, unsigned char value);
+unsigned short arena_read_u16(arena_t *arena, int addr);
+void arena_write_u16(arena_t *arena, int addr, unsigned short value);
+unsigned int arena_read_u32(arena_t *arena, int addr);
+void arena_write_u32(arena_t *arena, int addr, unsigned int value);
 #endif // _ARENA_H_
