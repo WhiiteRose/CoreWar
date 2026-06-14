@@ -9,3 +9,9 @@ void process_init(process_t *process, int pc)
         process->registers[i] = 0;
     }
 }
+
+void process_advance_pc(process_t *process, int offset)
+{
+    int new_pc = process->pc + offset;
+    process->pc = arena_wrap_addr(new_pc);
+}

@@ -34,3 +34,27 @@ Test(process_init, initializes_pc_wrapped_value) {
     }
 }
 
+Test(process_advance_pc, advances_pc_by_offset) {
+    process_t process;
+    process_init(&process, 100);
+    process_advance_pc(&process, 50);
+
+    cr_assert_eq(process.pc, 150);
+}
+
+Test(process_advance_pc, advances_pc_with_wraparound) {
+    process_t process;
+    process_init(&process, 4090);
+    process_advance_pc(&process, 10);
+
+    cr_assert_eq(process.pc, 4);
+}
+
+Test(process_advance_pc, advances_pc_with_negative_offset) {
+    process_t process;
+    process_init(&process, 10);
+    process_advance_pc(&process, -20);
+
+    cr_assert_eq(process.pc, 4086);
+}
+
