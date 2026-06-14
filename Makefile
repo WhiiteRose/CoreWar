@@ -28,7 +28,7 @@ $(TEST_NAME): $(TEST_OBJS) $(COMMON_OBJS)
 %.o: %.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 clean:
-	rm -f $(ASM_OBJS) $(COREWAR_OBJS) $(TEST_OBJS)
+	rm -f $(ASM_OBJS) $(COREWAR_OBJS) $(TEST_OBJS) $(COMMON_OBJS)
 fclean: clean
-	rm -f $(ASM_NAME) $(COREWAR_NAME) $(TEST_NAME) $(COMMON_OBJS)
+	rm -f $(ASM_NAME) $(COREWAR_NAME) $(TEST_NAME)
 re: fclean all
