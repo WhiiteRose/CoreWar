@@ -1,5 +1,6 @@
 #include <criterion/criterion.h>
 #include "corewar/arena.h"
+#include <stdint.h>
 
 Test(arena_wrap_addr, keeps_valid_address) {
     cr_assert_eq(arena_wrap_addr(0), 0);
@@ -194,4 +195,15 @@ Test(arena_write_u32, writes_value_to_negative_address) {
     cr_assert_eq(arena.memory[0], 0x34);
     cr_assert_eq(arena.memory[1], 0x56);
     cr_assert_eq(arena.memory[2], 0x78);
+}
+
+Test(arena_write_u32, writes_max_value) {
+    arena_t arena;
+    arena_init(&arena);
+    arena_write_u32(&arena, 0, UINT32_MAX);
+
+    cr_assert_eq(arena.memory[0], 0xFF);
+    cr_assert_eq(arena.memory[1], 0xFF);
+    cr_assert_eq(arena.memory[2], 0xFF);
+    cr_assert_eq(arena.memory[3], 0xFF);
 }
