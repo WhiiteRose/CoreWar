@@ -8,12 +8,14 @@ COREWAR_SRCS	:= src/cli/corewar_main.c
 ASM_OBJS	:= $(ASM_SRCS:.c=.o)
 COREWAR_OBJS	:= $(COREWAR_SRCS:.c=.o)
 COMMON_SRCS	:= src/vm/arena.c \
-	src/vm/process.c
+	src/vm/process.c	\
+	src/vm/vm.c
 COMMON_OBJS	:= $(COMMON_SRCS:.c=.o)
 TEST_NAME	:= unit_test
 TEST_SRCS	:= \
 	tests/unit/test_process.c \
-	tests/unit/test_arena.c
+	tests/unit/test_arena.c	\
+	tests/unit/test_vm.c
 TEST_OBJS	:= $(TEST_SRCS:.c=.o)
 CRITERION_FLAGS	:= -lcriterion
 .PHONY: all clean fclean re test
