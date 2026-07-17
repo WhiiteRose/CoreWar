@@ -9,6 +9,9 @@ typedef struct vm_s {
     process_t process;
     uint32_t current_cycle;
     uint32_t process_count;
+    uint32_t last_live_id;
+    uint32_t last_live_cycle;
+    uint32_t live_count;
 } vm_t;
 
 void vm_init(vm_t *vm);
