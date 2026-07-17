@@ -27,6 +27,16 @@ Test(vm_init, initializes_counters) {
     cr_assert_eq(vm.process_count, 1);
 }
 
+
+Test(vm_init, initializes_live_state) {
+    vm_t vm;
+    vm_init(&vm);
+
+    cr_assert_eq(vm.last_live_id, 0);
+    cr_assert_eq(vm.last_live_cycle, 0);
+    cr_assert_eq(vm.live_count, 0);
+}
+
 Test(vm_fetch_opcode, returns_correct_opcode) {
     vm_t vm;
     vm_init(&vm);
@@ -137,4 +147,22 @@ Test(vm_read_live_argument, reads_correct_value_with_wraparound) {
 
     uint32_t value = vm_read_live_argument(&vm);
     cr_assert_eq(value, 0x12345678);
+}
+
+Test(vm_step, live_stores_arguments) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_LIVE;
+    vm.arena.memory[1] = 0x00;
+    vm.arena.memory[2] = 0x00;
+    vm.arena.memory[3] = 0x00;
+    vm.arena.memory[4] = 0x42;
+
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.last_live_id, 0x00000042);
+    cr_assert_eq(vm.last_live_cycle, initial_current_cycle);
+    cr_assert_eq(vm.live_count, 1);
 }
