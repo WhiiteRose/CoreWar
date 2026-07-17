@@ -9,3 +9,8 @@ void vm_init(vm_t *vm)
     vm->current_cycle = 0;
     vm->process_count = 1;
 }
+
+uint8_t vm_fetch_opcode(vm_t *vm)
+{
+    return arena_read_u8(&vm->arena, vm->process.pc);
+}
