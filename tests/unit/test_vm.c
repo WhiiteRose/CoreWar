@@ -97,3 +97,44 @@ Test(vm_step, advances_pc_by_live_size_for_live_opcode) {
     cr_assert_eq(vm.process.pc, 4);
     cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
 }
+
+Test(vm_read_live_argument, reads_correct_value) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[1] = 0x12;
+    vm.arena.memory[2] = 0x34;
+    vm.arena.memory[3] = 0x56;
+    vm.arena.memory[4] = 0x78;
+
+    uint32_t value = vm_read_live_argument(&vm);
+    cr_assert_eq(value, 0x12345678);
+}
+
+Test(vm_read_live_argument, reads_correct_value_with_nonzero_pc) {
+    vm_t vm;
+    vm_init(&vm);
+    process_init(&vm.process, 10);
+
+    vm.arena.memory[11] = 0x12;
+    vm.arena.memory[12] = 0x34;
+    vm.arena.memory[13] = 0x56;
+    vm.arena.memory[14] = 0x78;
+
+    uint32_t value = vm_read_live_argument(&vm);
+    cr_assert_eq(value, 0x12345678);
+}
+
+Test(vm_read_live_argument, reads_correct_value_with_wraparound) {
+    vm_t vm;
+    vm_init(&vm);
+    process_init(&vm.process, MEM_SIZE - 2);
+
+    vm.arena.memory[MEM_SIZE - 1] = 0x12;
+    vm.arena.memory[0] = 0x34;
+    vm.arena.memory[1] = 0x56;
+    vm.arena.memory[2] = 0x78;
+
+    uint32_t value = vm_read_live_argument(&vm);
+    cr_assert_eq(value, 0x12345678);
+}

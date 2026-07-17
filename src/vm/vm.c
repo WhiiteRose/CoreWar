@@ -28,3 +28,8 @@ void vm_step(vm_t *vm)
     }
     vm->current_cycle += 1;
 }
+
+uint32_t vm_read_live_argument(vm_t *vm)
+{
+    return arena_read_u32(&vm->arena, vm->process.pc + 1);
+}
