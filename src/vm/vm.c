@@ -19,8 +19,12 @@ uint8_t vm_fetch_opcode(vm_t *vm)
 
 void vm_step(vm_t *vm)
 {
-    if (!opcode_is_valid(vm_fetch_opcode(vm))) {
+    uint8_t opcode = vm_fetch_opcode(vm);
+
+    if (!opcode_is_valid(opcode)) {
         process_advance_pc(&vm->process, 1);
+    } else if (opcode == OP_LIVE) {
+        process_advance_pc(&vm->process, 5);
     }
     vm->current_cycle += 1;
 }
