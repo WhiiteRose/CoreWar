@@ -1,5 +1,7 @@
 #include <stdint.h>
 #include "corewar/vm.h"
+#include "corewar/opcode.h"
+#include "corewar/process.h"
 
 
 void vm_init(vm_t *vm)
@@ -13,4 +15,12 @@ void vm_init(vm_t *vm)
 uint8_t vm_fetch_opcode(vm_t *vm)
 {
     return arena_read_u8(&vm->arena, vm->process.pc);
+}
+
+void vm_step(vm_t *vm)
+{
+    if (!opcode_is_valid(vm_fetch_opcode(vm))) {
+        process_advance_pc(&vm->process, 1);
+    }
+    vm->current_cycle += 1;
 }

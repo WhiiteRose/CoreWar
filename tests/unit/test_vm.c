@@ -46,3 +46,28 @@ Test(vm_fetch_opcode, returns_correct_opcode_at_nonzero_pc) {
     uint8_t opcode = vm_fetch_opcode(&vm);
     cr_assert_eq(opcode, 0x99);
 }
+
+Test(vm_step, increments_current_cycle_if_opcode_invalid) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = 0x00;
+
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.process.pc, 1);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
+}
+
+Test (vm_step, increments_current_cycle_if_opcode_invalid_at_end_of_memory) {
+    vm_t vm;
+    vm_init(&vm);
+    process_init(&vm.process, MEM_SIZE - 1);
+    vm.arena.memory[MEM_SIZE - 1] = 0x00;
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.process.pc, 0);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
+}
