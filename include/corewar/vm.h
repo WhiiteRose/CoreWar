@@ -12,5 +12,7 @@ typedef struct vm_s {
 } vm_t;
 
 void vm_init(vm_t *vm);
+uint8_t vm_fetch_opcode(vm_t *vm); 
+
 
 #endif // _VM_H_

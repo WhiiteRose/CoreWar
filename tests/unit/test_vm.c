@@ -25,3 +25,24 @@ Test(vm_init, initializes_counters) {
     cr_assert_eq(vm.current_cycle, 0);
     cr_assert_eq(vm.process_count, 1);
 }
+
+Test(vm_fetch_opcode, returns_correct_opcode) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = 0x42;
+
+    uint8_t opcode = vm_fetch_opcode(&vm);
+    cr_assert_eq(opcode, 0x42);
+}
+
+Test(vm_fetch_opcode, returns_correct_opcode_at_nonzero_pc) {
+    vm_t vm;
+    vm_init(&vm);
+
+    process_init(&vm.process, 5);
+    vm.arena.memory[5] = 0x99;
+
+    uint8_t opcode = vm_fetch_opcode(&vm);
+    cr_assert_eq(opcode, 0x99);
+}
