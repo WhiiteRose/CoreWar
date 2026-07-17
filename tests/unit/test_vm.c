@@ -2,6 +2,7 @@
 #include "corewar/vm.h"
 #include "corewar/arena.h"
 #include "corewar/process.h"
+#include "corewar/opcode.h"
 
 Test(vm_init, initializes_arena_and_process) {
     vm_t vm;
@@ -47,7 +48,7 @@ Test(vm_fetch_opcode, returns_correct_opcode_at_nonzero_pc) {
     cr_assert_eq(opcode, 0x99);
 }
 
-Test(vm_step, increments_current_cycle_if_opcode_invalid) {
+Test(vm_step, advances_pc_by_one_for_invalid_opcode) {
     vm_t vm;
     vm_init(&vm);
 
@@ -60,7 +61,7 @@ Test(vm_step, increments_current_cycle_if_opcode_invalid) {
     cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
 }
 
-Test (vm_step, increments_current_cycle_if_opcode_invalid_at_end_of_memory) {
+Test(vm_step, increments_current_cycle_if_opcode_invalid_at_end_of_memory) {
     vm_t vm;
     vm_init(&vm);
     process_init(&vm.process, MEM_SIZE - 1);
@@ -69,5 +70,30 @@ Test (vm_step, increments_current_cycle_if_opcode_invalid_at_end_of_memory) {
     vm_step(&vm);
 
     cr_assert_eq(vm.process.pc, 0);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
+}
+
+Test(vm_step, advances_pc_by_live_size_for_live_opcode_at_zero_pc) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_LIVE;
+
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.process.pc, 5);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
+}
+
+Test(vm_step, advances_pc_by_live_size_for_live_opcode) {
+    vm_t vm;
+    vm_init(&vm);
+    process_init(&vm.process, MEM_SIZE - 1);
+    vm.arena.memory[MEM_SIZE - 1] = OP_LIVE;
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.process.pc, 4);
     cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
 }
