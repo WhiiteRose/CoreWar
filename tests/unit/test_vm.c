@@ -186,3 +186,37 @@ Test(vm_execute_live, updates_live_state) {
     cr_assert_eq(vm.current_cycle, initial_current_cycle);
     cr_assert_eq(vm.process.pc, 5);
 }
+
+Test(vm_fetch_coding_byte, returns_correct_coding_byte) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_LD;
+    vm.arena.memory[1] = 0x90;
+
+    uint8_t coding_byte = vm_fetch_coding_byte(&vm);
+    cr_assert_eq(coding_byte, 0x90);
+}
+
+Test(vm_fetch_coding_byte, returns_correct_coding_byte_pc_non_zero) {
+    vm_t vm;
+    vm_init(&vm);
+
+    process_init(&vm.process, 10);
+    vm.arena.memory[11] = 0x90;
+
+    uint8_t coding_byte = vm_fetch_coding_byte(&vm);
+    cr_assert_eq(coding_byte, 0x90);
+}
+
+Test(vm_fetch_coding_byte, returns_correct_coding_byte_pc_wraparound) {
+    vm_t vm;
+    vm_init(&vm);
+
+    process_init(&vm.process, MEM_SIZE - 1);
+    vm.arena.memory[0] = 0x90;
+
+    uint8_t coding_byte = vm_fetch_coding_byte(&vm);
+    cr_assert_eq(coding_byte, 0x90);
+}
+
