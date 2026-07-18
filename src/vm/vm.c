@@ -44,3 +44,8 @@ void vm_execute_live(vm_t *vm)
     vm->live_count += 1;
     process_advance_pc(&vm->process, 5);
 }
+
+uint8_t vm_fetch_coding_byte(vm_t *vm)
+{
+    return arena_read_u8(&vm->arena, vm->process.pc + 1);
+}
