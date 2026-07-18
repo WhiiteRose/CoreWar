@@ -18,5 +18,6 @@ void vm_init(vm_t *vm);
 uint8_t vm_fetch_opcode(vm_t *vm); 
 void vm_step(vm_t *vm);
 uint32_t vm_read_live_argument(vm_t *vm);
+void vm_execute_live(vm_t *vm);
 
 #endif // _VM_H_

@@ -27,10 +27,7 @@ void vm_step(vm_t *vm)
     if (!opcode_is_valid(opcode)) {
         process_advance_pc(&vm->process, 1);
     } else if (opcode == OP_LIVE) {
-        vm->last_live_id = vm_read_live_argument(vm);
-        vm->last_live_cycle = vm->current_cycle;
-        vm->live_count += 1;
-        process_advance_pc(&vm->process, 5);
+        vm_execute_live(vm);
     }
     vm->current_cycle += 1;
 }
@@ -38,4 +35,12 @@ void vm_step(vm_t *vm)
 uint32_t vm_read_live_argument(vm_t *vm)
 {
     return arena_read_u32(&vm->arena, vm->process.pc + 1);
+}
+
+void vm_execute_live(vm_t *vm)
+{
+    vm->last_live_id = vm_read_live_argument(vm);
+    vm->last_live_cycle = vm->current_cycle;
+    vm->live_count += 1;
+    process_advance_pc(&vm->process, 5);
 }
