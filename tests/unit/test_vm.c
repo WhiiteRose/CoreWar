@@ -166,3 +166,23 @@ Test(vm_step, live_stores_arguments) {
     cr_assert_eq(vm.last_live_cycle, initial_current_cycle);
     cr_assert_eq(vm.live_count, 1);
 }
+
+Test(vm_execute_live, updates_live_state) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_LIVE;
+    vm.arena.memory[1] = 0x00;
+    vm.arena.memory[2] = 0x00;
+    vm.arena.memory[3] = 0x00;
+    vm.arena.memory[4] = 0x42;
+
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_execute_live(&vm);
+
+    cr_assert_eq(vm.last_live_id, 0x00000042);
+    cr_assert_eq(vm.last_live_cycle, initial_current_cycle);
+    cr_assert_eq(vm.live_count, 1);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle);
+    cr_assert_eq(vm.process.pc, 5);
+}
