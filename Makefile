@@ -10,14 +10,16 @@ COREWAR_OBJS	:= $(COREWAR_SRCS:.c=.o)
 COMMON_SRCS	:= src/vm/arena.c \
 	src/vm/process.c	\
 	src/vm/vm.c	\
-	src/vm/opcode.c
+	src/vm/opcode.c \
+	src/vm/coding_byte.c
 COMMON_OBJS	:= $(COMMON_SRCS:.c=.o)
 TEST_NAME	:= unit_test
 TEST_SRCS	:= \
 	tests/unit/test_process.c \
 	tests/unit/test_arena.c	\
 	tests/unit/test_vm.c	\
-	tests/unit/test_opcode.c
+	tests/unit/test_opcode.c	\
+	tests/unit/test_coding_byte.c
 TEST_OBJS	:= $(TEST_SRCS:.c=.o)
 CRITERION_FLAGS	:= -lcriterion
 .PHONY: all clean fclean re test
