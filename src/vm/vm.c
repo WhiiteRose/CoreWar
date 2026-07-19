@@ -2,6 +2,7 @@
 #include "corewar/vm.h"
 #include "corewar/opcode.h"
 #include "corewar/process.h"
+#include "corewar/coding_byte.h"
 
 
 void vm_init(vm_t *vm)
@@ -48,4 +49,9 @@ void vm_execute_live(vm_t *vm)
 uint8_t vm_fetch_coding_byte(vm_t *vm)
 {
     return arena_read_u8(&vm->arena, vm->process.pc + 1);
+}
+
+uint8_t vm_instruction_size_with_coding_byte(vm_t *vm, int arg_count)
+{
+    return 1 + 1 + coding_byte_arguments_size(vm_fetch_coding_byte(vm), arg_count);
 }
