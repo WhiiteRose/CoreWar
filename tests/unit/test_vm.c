@@ -220,3 +220,35 @@ Test(vm_fetch_coding_byte, returns_correct_coding_byte_pc_wraparound) {
     cr_assert_eq(coding_byte, 0x90);
 }
 
+Test(vm_instruction_size_with_coding_byte, returns_correct_size) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_LD;
+    vm.arena.memory[1] = 0x90;
+
+    uint8_t size = vm_instruction_size_with_coding_byte(&vm, 2);
+    cr_assert_eq(size, 7);
+}
+
+Test(vm_instruction_size_with_coding_byte, returns_correct_size_with_3_register) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_LD;
+    vm.arena.memory[1] = 0x54;
+
+    uint8_t size = vm_instruction_size_with_coding_byte(&vm, 3);
+    cr_assert_eq(size, 5);
+}
+
+Test(vm_instruction_size_with_coding_byte, returns_correct_size_with_non_zero) {
+    vm_t vm;
+    vm_init(&vm);
+
+    process_init(&vm.process, 10);
+    vm.arena.memory[11] = 0x90;
+
+    uint8_t size = vm_instruction_size_with_coding_byte(&vm, 2);
+    cr_assert_eq(size, 7);
+}

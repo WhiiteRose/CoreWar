@@ -20,5 +20,6 @@ void vm_step(vm_t *vm);
 uint32_t vm_read_live_argument(vm_t *vm);
 void vm_execute_live(vm_t *vm);
 uint8_t vm_fetch_coding_byte(vm_t *vm);
+uint8_t vm_instruction_size_with_coding_byte(vm_t *vm, int arg_count);
 
 #endif // _VM_H_
