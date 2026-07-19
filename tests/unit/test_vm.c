@@ -167,6 +167,62 @@ Test(vm_step, live_stores_arguments) {
     cr_assert_eq(vm.live_count, 1);
 }
 
+Test(vm_step, advances_pc_by_ld_size_for_ld_opcode) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_LD;
+    vm.arena.memory[1] = 0x90;
+
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.process.pc, 7);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
+}
+
+Test(vm_step, advances_pc_by_st_size_for_st_opcode) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_ST;
+    vm.arena.memory[1] = 0x50;
+
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.process.pc, 4);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
+}
+
+Test(vm_step, advances_pc_by_add_size_for_add_opcode) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_ADD;
+    vm.arena.memory[1] = 0x54;
+
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.process.pc, 5);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
+}
+
+Test(vm_step, advances_pc_by_sub_size_for_sub_opcode) {
+    vm_t vm;
+    vm_init(&vm);
+
+    vm.arena.memory[0] = OP_SUB;
+    vm.arena.memory[1] = 0x54;
+
+    uint32_t initial_current_cycle = vm.current_cycle;
+    vm_step(&vm);
+
+    cr_assert_eq(vm.process.pc, 5);
+    cr_assert_eq(vm.current_cycle, initial_current_cycle + 1);
+}
+
 Test(vm_execute_live, updates_live_state) {
     vm_t vm;
     vm_init(&vm);
