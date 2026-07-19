@@ -38,3 +38,23 @@ Test(arg_type_size, returns_2_for_arg_ind) {
 Test(arg_type_size, returns_0_for_arg_none) {
     cr_assert_eq(arg_type_size(ARG_NONE), 0);
 }
+
+Test(coding_byte_arguments_size, returns_correct_size_for_coding_byte_0x90_and_3_args) {
+    cr_assert_eq(coding_byte_arguments_size(0x90, 3), 5);
+}
+
+Test(coding_byte_arguments_size, returns_correct_size_for_coding_byte_0x90_and_2_args) {
+    cr_assert_eq(coding_byte_arguments_size(0x90, 2), 5);
+}
+
+Test(coding_byte_arguments_size, returns_correct_size_for_coding_byte_0x54_and_3_args) {
+    cr_assert_eq(coding_byte_arguments_size(0x54, 3), 3);
+}
+
+Test(coding_byte_arguments_size, returns_correct_size_for_coding_byte_0xb4_and_3_args) {
+    cr_assert_eq(coding_byte_arguments_size(0xb4, 3), 7);
+}
+
+Test(coding_byte_arguments_size, returns_correct_size_for_coding_byte_0x90_and_0_args) {
+    cr_assert_eq(coding_byte_arguments_size(0x90, 0), 0);
+}

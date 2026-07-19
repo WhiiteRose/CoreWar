@@ -27,3 +27,12 @@ uint8_t arg_type_size(uint8_t arg_type)
             return 0;
     }
 }
+
+uint8_t coding_byte_arguments_size(uint8_t coding_byte, int arg_count)
+{
+    uint8_t size = 0;
+    for (int i = 1; i <= arg_count; i++) {
+        size += arg_type_size(coding_byte_get_arg_type(coding_byte, i));
+    }
+    return size;
+}
