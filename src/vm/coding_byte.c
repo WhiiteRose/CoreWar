@@ -13,3 +13,17 @@ uint8_t coding_byte_get_arg_type(uint8_t coding_byte, int arg_index)
             return ARG_NONE;
     }
 }
+
+uint8_t arg_type_size(uint8_t arg_type)
+{
+    switch (arg_type) {
+        case ARG_REG:
+            return 1;
+        case ARG_DIR:
+            return 4;
+        case ARG_IND:
+            return 2;
+        default:
+            return 0;
+    }
+}
