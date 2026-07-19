@@ -29,6 +29,10 @@ void vm_step(vm_t *vm)
         process_advance_pc(&vm->process, 1);
     } else if (opcode == OP_LIVE) {
         vm_execute_live(vm);
+    } else if (opcode == OP_LD  || opcode == OP_ST) {
+        process_advance_pc(&vm->process, vm_instruction_size_with_coding_byte(vm, 2));
+    } else if (opcode == OP_ADD || opcode == OP_SUB) {
+        process_advance_pc(&vm->process, vm_instruction_size_with_coding_byte(vm, 3));
     }
     vm->current_cycle += 1;
 }
